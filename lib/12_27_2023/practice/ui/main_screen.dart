@@ -15,10 +15,16 @@ class _MainScreenState extends State<MainScreen> {
   final repository = MockImageItemRepository();
 
   List<ImageItem> imageItems = [];
+  bool isLoading = false;
 
   Future<void> searchImage(String query) async {
+    setState(() {
+      isLoading = true;
+    });
     imageItems = await repository.getImage(query);
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
@@ -54,22 +60,25 @@ class _MainScreenState extends State<MainScreen> {
             SizedBox(
               height: 32,
             ),
-            Expanded(
-              child: GridView.builder(
-                itemCount: imageItems.length,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 32,
-                  mainAxisSpacing: 32,
-                ),
-                itemBuilder: (context, index) {
-                  final imageItem = imageItems[index];
-                  return ImageItemWidget(
-                    imageItem: imageItem,
-                  );
-                },
-              ),
-            )
+            isLoading
+                ? const Center(child: CircularProgressIndicator())
+                : Expanded(
+                    child: GridView.builder(
+                      itemCount: imageItems.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        crossAxisSpacing: 32,
+                        mainAxisSpacing: 32,
+                      ),
+                      itemBuilder: (context, index) {
+                        final imageItem = imageItems[index];
+                        return ImageItemWidget(
+                          imageItem: imageItem,
+                        );
+                      },
+                    ),
+                  )
           ],
         ),
       )),
