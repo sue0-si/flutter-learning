@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_learning/12_27_2023/practice/main_screen.dart';
+import 'package:flutter_learning/12_27_2023/practice/ui/main_screen.dart';
 
 void main() {
   runApp(const MyApp());

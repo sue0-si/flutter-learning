@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_learning/12_27_2023/practice/model/image_item.dart';
+import 'package:flutter_learning/12_27_2023/practice/ui/widget/image_item_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -28,7 +30,7 @@ class _MainScreenState extends State<MainScreen> {
                 ),
               ),
             ),
-
+            SizedBox(height: 32,),
             Expanded(
               child: GridView.builder(
                 itemCount: 10,
@@ -38,7 +40,11 @@ class _MainScreenState extends State<MainScreen> {
                   mainAxisSpacing: 32,
                 ),
                 itemBuilder: (context, index) {
-
+                  final imageItem = ImageItem(
+                      imageUrl:
+                          'https://cdn.pixabay.com/photo/2017/09/26/13/21/apples-2788599_150.jpg',
+                      id: 'apple');
+                  return ImageItemWidget(imageItem: imageItem,);
                 },
               ),
             )
