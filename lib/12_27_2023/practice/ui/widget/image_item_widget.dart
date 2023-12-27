@@ -11,7 +11,6 @@ class ImageItemWidget extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(20.0),
       child: Image.network(imageItem.imageUrl, fit: BoxFit.cover),
-
     );
   }
 }
