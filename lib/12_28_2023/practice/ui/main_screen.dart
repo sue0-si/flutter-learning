@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_learning/12_27_2023/practice/model/image_item.dart';
+import 'package:flutter_learning/12_27_2023/practice/repository/image_item_repository.dart';
+import 'package:flutter_learning/12_27_2023/practice/ui/widget/image_item_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -8,6 +11,17 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final textController = TextEditingController();
+  final repository = PixabayImageItemRepository();
+
+  @override
+  dispose() {
+    super.dispose();
+    textController.dispose();
+  }
+
+  List<ImageItem> imageItems = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,25 +31,40 @@ class _MainScreenState extends State<MainScreen> {
           child: Column(
             children: [
               TextField(
+                controller: textController,
                 decoration: InputDecoration(
                   hintText: "Search image",
                   suffixIcon: IconButton(
                     icon: Icon(Icons.search),
-                    onPressed: () {},
+                    onPressed: () {
+                      setState(() {});
+                    },
                   ),
                 ),
               ),
-              SizedBox(height: 32),
-              Expanded(
-                  child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2),
-                itemBuilder: (BuildContext context, int index) {
-                  return ClipRRect(
-                    child: Container(color: Colors.grey),
-                  );
+              const SizedBox(height: 32),
+              FutureBuilder(
+                future: PixabayImageItemRepository()
+                    .getImageItems(textController.text),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const CircularProgressIndicator();
+                  }
+                  final imageItems = snapshot.data;
+                  return Expanded(
+                      child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 16,
+                            mainAxisSpacing: 16),
+                    itemBuilder: (BuildContext context, int index) {
+                      final imageItem = imageItems![index];
+                      return ImageItemWidget(imageItem: imageItem);
+                    },
+                  ));
                 },
-              )),
+              )
             ],
           ),
         ),
