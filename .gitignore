@@ -133,7 +133,7 @@ obj/
 *.iws
 /out/
 
-lib/12_27_2023/practice/data_source/pixabay_api.dart
+.../data_source/pixabay_api.dart
 
 # User-specific configurations
 .idea/caches/

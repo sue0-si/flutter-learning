@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../12_28_2023/practice/ui/main_screen.dart';
+import 'package:flutter_learning/01_02_2024/ui/main_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: "api practice 1",
+      title: "api practice 3",
       theme: ThemeData(
         useMaterial3: true,
       ),
