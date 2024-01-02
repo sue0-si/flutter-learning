@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_learning/01_02_2024/data/model/image_item.dart';
+
+import 'widget/image_item_widget.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -35,13 +38,7 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisSpacing: 32,
                   ),
                   itemBuilder: (context, index) {
-                    return ClipRRect(
-                      borderRadius: BorderRadius.circular(16.0),
-                      child: Image.network(
-                        '',
-                        fit: BoxFit.cover,
-                      ),
-                    );
+                    return ImageItemWidget(imageItem: ImageItem(imageUrl: 'https://cdn.pixabay.com/photo/2023/10/20/19/25/moon-8330104_1280.png', tags: 'moon'),);
                   }),
             ),
           ]),
