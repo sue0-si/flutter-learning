@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_learning/01_02_2024/data/model/image_item.dart';
+import 'package:flutter_learning/01_02_2024/data/repository/image_repository.dart';
 
 import 'widget/image_item_widget.dart';
 
@@ -11,6 +12,29 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
+  final searchController = TextEditingController();
+  final repository = PixabayImageRepository();
+  List<ImageItem> imageItems = [];
+  bool isLoading = false;
+
+  Future searchImage(String input) async {
+    setState(() {
+      isLoading = true;
+    });
+
+    imageItems = await repository.getImageItems(input);
+
+    setState(() {
+      isLoading = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,26 +43,37 @@ class _MainScreenState extends State<MainScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Column(children: [
             TextField(
+              controller: searchController,
               decoration: InputDecoration(
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                   hintText: 'Search Image',
-                  suffixIcon:
-                      IconButton(onPressed: () {}, icon: Icon(Icons.search))),
+                  suffixIcon: IconButton(
+                      onPressed: () {
+                        searchImage(searchController.text);
+                      },
+                      icon: Icon(Icons.search))),
             ),
             const SizedBox(
               height: 32,
             ),
-            Expanded(
+            isLoading
+                ? const Center(
+              child: CircularProgressIndicator(),
+            )
+                : Expanded(
               child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  itemCount: imageItems.length,
+                  gridDelegate:
+                  const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     crossAxisSpacing: 32,
                     mainAxisSpacing: 32,
                   ),
                   itemBuilder: (context, index) {
-                    return ImageItemWidget(imageItem: ImageItem(imageUrl: 'https://cdn.pixabay.com/photo/2023/10/20/19/25/moon-8330104_1280.png', tags: 'moon'),);
+                    final imageItem = imageItems[index];
+                    return ImageItemWidget(imageItem: imageItem);
                   }),
             ),
           ]),
