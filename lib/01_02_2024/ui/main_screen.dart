@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_learning/01_02_2024/data/model/image_item.dart';
-import 'package:flutter_learning/01_02_2024/data/repository/image_repository.dart';
+import 'package:flutter_learning/01_02_2024/ui/main_view_model.dart';
 
 import 'widget/image_item_widget.dart';
 
@@ -13,21 +12,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final searchController = TextEditingController();
-  final repository = PixabayImageRepository();
-  List<ImageItem> imageItems = [];
-  bool isLoading = false;
-
-  Future searchImage(String input) async {
-    setState(() {
-      isLoading = true;
-    });
-
-    imageItems = await repository.getImageItems(input);
-
-    setState(() {
-      isLoading = false;
-    });
-  }
+  final viewModel = MainViewModel();
 
   @override
   void dispose() {
@@ -50,21 +35,27 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   hintText: 'Search Image',
                   suffixIcon: IconButton(
-                      onPressed: () {
-                        searchImage(searchController.text);
+                      onPressed: () async {
+                        setState(() {
+                          viewModel.isLoading = true;
+                        });
+                        await viewModel.searchImage(searchController.text);
+                        setState(() {
+                          viewModel.isLoading = false;
+                        });
                       },
                       icon: Icon(Icons.search))),
             ),
             const SizedBox(
               height: 32,
             ),
-            isLoading
+            viewModel.isLoading
                 ? const Center(
               child: CircularProgressIndicator(),
             )
                 : Expanded(
               child: GridView.builder(
-                  itemCount: imageItems.length,
+                  itemCount: viewModel.imageItems.length,
                   gridDelegate:
                   const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -72,7 +63,7 @@ class _MainScreenState extends State<MainScreen> {
                     mainAxisSpacing: 32,
                   ),
                   itemBuilder: (context, index) {
-                    final imageItem = imageItems[index];
+                    final imageItem = viewModel.imageItems[index];
                     return ImageItemWidget(imageItem: imageItem);
                   }),
             ),
