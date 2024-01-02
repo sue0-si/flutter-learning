@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_learning/01_02_2024/ui/main_view_model.dart';
+import 'package:provider/provider.dart';
 
 import 'widget/image_item_widget.dart';
 
@@ -12,7 +13,7 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final searchController = TextEditingController();
-  final viewModel = MainViewModel();
+
 
   @override
   void dispose() {
@@ -22,6 +23,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<MainViewModel>();
+
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -35,16 +38,10 @@ class _MainScreenState extends State<MainScreen> {
                   ),
                   hintText: 'Search Image',
                   suffixIcon: IconButton(
-                      onPressed: () async {
-                        setState(() {
-                          viewModel.isLoading = true;
-                        });
-                        await viewModel.searchImage(searchController.text);
-                        setState(() {
-                          viewModel.isLoading = false;
-                        });
+                      onPressed: () {
+                        viewModel.searchImage(searchController.text);
                       },
-                      icon: Icon(Icons.search))),
+                      icon: const Icon(Icons.search))),
             ),
             const SizedBox(
               height: 32,
