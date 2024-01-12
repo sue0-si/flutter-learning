@@ -25,42 +25,44 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     final viewModel = context.watch<MainViewModel>();
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _textController,
-              decoration: InputDecoration(
-                hintText: 'search image',
-                suffixIcon: IconButton(
-                  onPressed: () {
-                    viewModel.searchImage(_textController.text);
-                  },
-                  icon: const Icon(Icons.search),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              TextField(
+                controller: _textController,
+                decoration: InputDecoration(
+                  hintText: 'search image',
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      viewModel.searchImage(_textController.text);
+                    },
+                    icon: const Icon(Icons.search),
+                  ),
                 ),
               ),
-            ),
-            const SizedBox(
-              height: 24,
-            ),
-            viewModel.isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(),
-                  )
-                : Expanded(
-                    child: GridView.builder(
-                        itemCount: viewModel.imageItems.length,
-                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            mainAxisSpacing: 16,
-                            crossAxisSpacing: 16),
-                        itemBuilder: (context, index) {
-                          final item = viewModel.imageItems[index];
-                          return ItemWidget(imageModel: item);
-                        }),
-                  )
-          ],
+              const SizedBox(
+                height: 24,
+              ),
+              viewModel.isLoading
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Expanded(
+                      child: GridView.builder(
+                          itemCount: viewModel.imageItems.length,
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              mainAxisSpacing: 16,
+                              crossAxisSpacing: 16),
+                          itemBuilder: (context, index) {
+                            final item = viewModel.imageItems[index];
+                            return ItemWidget(imageModel: item);
+                          }),
+                    )
+            ],
+          ),
         ),
       ),
     );
