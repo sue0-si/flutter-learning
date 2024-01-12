@@ -133,7 +133,7 @@ obj/
 *.iws
 /out/
 
-lib/01_02_2024/data/data_source
+lib/01_12_2024/data/source
 
 # User-specific configurations
 .idea/caches/
